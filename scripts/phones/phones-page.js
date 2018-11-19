@@ -61,7 +61,7 @@ export default class PhonesPage {
         <!--Main content-->
         <div class="col-md-10">
           <div data-component="phone-catalog"></div>
-          <div data-component="phone-viewer"></div>
+          <div data-component="phone-viewer" hidden></div>
         </div>
       </div>
     `;
