@@ -24,6 +24,17 @@ export default class PhonesPage {
 
     this._viewer = new PhoneViewer({
       element: this._element.querySelector('[data-component="phone-viewer"]'),
+
+      onClickGoBack: () => {
+          this._element.hide();
+          this._catalog.show();
+      },
+
+          onClickImage: currentSrc => {
+              let largeImg = document.querySelector('[data-element="image"]');
+              largeImg.src = currentSrc;
+          }
+
     });
   }
 
