@@ -3,12 +3,17 @@
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
 import PhoneService from './phone-service.js';
+import Basket from "./components/basket.js";
 
 export default class PhonesPage {
 	constructor({ element }) {
 		this._element = element;
-		this._basket = [];
 		this._render();
+		
+		this._basket = new Basket({
+			element: this._element.querySelector('[data-component="phone-basket"]')
+		});
+		
 		
 		this._catalog = new PhoneCatalog({
 			element: this._element.querySelector('[data-component="phone-catalog"]'),
@@ -22,8 +27,7 @@ export default class PhonesPage {
 			},
 			onPhoneAddToBasketButtonClick: (phoneId) => {
 				const phoneDetails = PhoneService.getOneById(phoneId);
-				this._basket.push(phoneDetails);
-				this._render();
+				this._basket.addPhoneToBasket(phoneDetails);
 			}
 		});
 
@@ -33,14 +37,14 @@ export default class PhonesPage {
 				this._catalog.show();
 				this._viewer.hide();
 			},
-			onPhoneAddToBasketButtonClick: (phone) => {
-				console.log(phone);
+			onPhoneAddToBasketButtonClick: (phoneDetails) => {
+				this._basket.addPhoneToBasket(phoneDetails);
 			},
 		});
 	
   }
 	_render() {
-		const {_basket: basket} = this;
+		
 		this._element.innerHTML = `
 			<div class="row">
 			
@@ -61,12 +65,7 @@ export default class PhonesPage {
 						</p>
 					</section>
 			
-					<section>
-						<p>Shopping Cart</p>
-						<ul>
-							${basket.map(phone => `<li>${phone.name}</li>`).join('')}
-						</ul>
-					</section>
+					<section data-component="phone-basket"></section>
 				</div>
 			
 				<!--Main content-->

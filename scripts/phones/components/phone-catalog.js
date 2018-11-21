@@ -10,29 +10,28 @@ export default class PhoneCatalog extends Component {
 
     this._render();
 	
-		this._element.addEventListener('click', (event) => {
-			const phoneElement 					= event.target.closest('[data-element="phone-item"]');
-			const phoneElementAddToCartButton 	= event.target.closest('[data-element="phone-item-add-to-cart-button"]');
+	this._element.addEventListener('click', (event) => {
+		const phoneElement 					= event.target.closest('[data-element="phone-item"]');
+		const phoneElementAddToCartButton 	= event.target.closest('[data-element="phone-item-add-to-cart-button"]');
+	
+		if (!phoneElement && !phoneElementAddToCartButton) {
+			return;
+		}
+	
+		const isPhoneElementClick 					= phoneElement !== null;
+		const isPhoneElementAddToCartButtonClick 	= phoneElementAddToCartButton !== null;
+	
+		switch(true){
+			case isPhoneElementAddToCartButtonClick:
+				this._onPhoneAddToBasketButtonClick(phoneElement.dataset.phoneId);
+				event.stopPropagation();
+				break;
+			case isPhoneElementClick:
+				this._onPhoneSelected(phoneElement.dataset.phoneId);
+				break;
+		}
 		
-			if (!phoneElement && !phoneElementAddToCartButton) {
-				return;
-			}
-		
-			const isPhoneElementClick 					= phoneElement !== null;
-			const isPhoneElementAddToCartButtonClick 	= phoneElementAddToCartButton !== null;
-		
-			switch(true){
-				case isPhoneElementAddToCartButtonClick:
-					this._onPhoneAddToBasketButtonClick(phoneElement.dataset.phoneId);
-					event.stopPropagation();
-					//this._render();
-					break;
-				case isPhoneElementClick:
-					this._onPhoneSelected(phoneElement.dataset.phoneId);
-					break;
-			}
-			
-		});
+	});
   }
 
   _render() {
