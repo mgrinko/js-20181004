@@ -1,46 +1,78 @@
 import Component from '../../component.js';
 
 export default class PhoneViewer extends Component {
-  show(phone) {
-    this._phone = phone;
-
-    this._render();
-
-    super.show();
-  }
-
-  _render() {
-    this._element.innerHTML = `
-      <img class="phone" src="img/phones/motorola-xoom-with-wi-fi.0.jpg">
-  
-      <button>Back</button>
-      <button>Add to basket</button>
-  
-  
-      <h1>Motorola XOOM™ with Wi-Fi</h1>
-  
-      <p>Motorola XOOM with Wi-Fi has a super-powerful dual-core processor and Android™ 3.0 (Honeycomb) — the Android platform designed specifically for tablets. With its 10.1-inch HD widescreen display, you’ll enjoy HD video in a thin, light, powerful and upgradeable tablet.</p>
-  
-      <ul class="phone-thumbs">
-        <li>
-          <img src="img/phones/motorola-xoom-with-wi-fi.0.jpg">
-        </li>
-        <li>
-          <img src="img/phones/motorola-xoom-with-wi-fi.1.jpg">
-        </li>
-        <li>
-          <img src="img/phones/motorola-xoom-with-wi-fi.2.jpg">
-        </li>
-        <li>
-          <img src="img/phones/motorola-xoom-with-wi-fi.3.jpg">
-        </li>
-        <li>
-          <img src="img/phones/motorola-xoom-with-wi-fi.4.jpg">
-        </li>
-        <li>
-          <img src="img/phones/motorola-xoom-with-wi-fi.5.jpg">
-        </li>
-      </ul>
-    `;
-  }
+	constructor({ element, onPhoneBackButtonClick, onPhoneAddToBasketButtonClick }) {
+		super({ element });
+		
+		this._onPhoneBackButtonClick = onPhoneBackButtonClick;
+		this._onPhoneAddToBasketButtonClick = onPhoneAddToBasketButtonClick;
+		
+		this._element.addEventListener('click', (event) => {
+			const phoneElementBackButton 			= event.target.closest('[data-element="phone-viewer-back-button"]');
+			const phoneElementImage 				= event.target.closest('[data-element="phone-viewer-image"]');
+			const phoneElementAddToBasketButton 	= event.target.closest('[data-element="phone-viewer-add-to-basket-button"]');
+			
+			if (!phoneElementBackButton && !phoneElementImage && !phoneElementAddToBasketButton) {
+				return;
+			}
+			const isPhoneElementBackButtonClick 		= phoneElementBackButton !== null;
+			const isPhoneElementImageClick 				= phoneElementImage !== null;
+			const isPhoneElementAddToBasketButtonClick 	= phoneElementAddToBasketButton !== null;
+			
+			switch(true){
+				case isPhoneElementBackButtonClick:
+					this._onPhoneBackButtonClick();
+					break;
+				case isPhoneElementImageClick:
+					const image = phoneElementImage.getAttribute('src');
+					this._onPhoneImageClick(image);
+					break;
+				case isPhoneElementAddToBasketButtonClick:
+					this._onPhoneAddToBasketButtonClick(this._phone);
+					this._render();
+					break;
+			}
+		});
+	}
+	
+	_onPhoneImageClick(image){
+		this._currentSlide = image;
+		this._render();
+	}
+	
+	show(phone) {
+		this._phone = phone;
+		[this._currentSlide] = phone.images;
+		
+		this._render();
+		
+		super.show();
+	}
+	
+	_render() {
+		const {name, description, images} = this._phone;
+		const currentSlide = this._currentSlide;
+		
+		this._element.innerHTML = `
+			<img class="phone" src=${currentSlide}>
+			
+			<button data-element="phone-viewer-back-button">Back</button>
+			<button data-element="phone-viewer-add-to-basket-button">Add to basket</button>
+			
+			
+			<h1>${name}</h1>
+			
+			<p>${description}</p>
+			
+			<ul class="phone-thumbs">
+			${images.map(image => {
+				return `
+				<li>
+					<img data-element="phone-viewer-image" src = ${image}>
+				</li>
+				`;
+			}).join('')}
+			</ul>
+`;
+	}
 }

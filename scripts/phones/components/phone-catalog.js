@@ -1,23 +1,38 @@
 import Component from '../../component.js';
 
 export default class PhoneCatalog extends Component {
-  constructor({ element, phones, onPhoneSelected }) {
+  constructor({ element, phones, onPhoneSelected, onPhoneAddToBasketButtonClick }) {
     super({ element });
 
-    this._phones = phones;
-    this._onPhoneSelected = onPhoneSelected;
+    this._phones 						= phones;
+    this._onPhoneSelected 				= onPhoneSelected;
+    this._onPhoneAddToBasketButtonClick = onPhoneAddToBasketButtonClick;
 
     this._render();
-
-    this._element.addEventListener('click', (event) => {
-      let phoneElement = event.target.closest('[data-element="phone-item"]');
-
-      if (!phoneElement) {
-        return;
-      }
-
-      this._onPhoneSelected(phoneElement.dataset.phoneId);
-    });
+	
+		this._element.addEventListener('click', (event) => {
+			const phoneElement 					= event.target.closest('[data-element="phone-item"]');
+			const phoneElementAddToCartButton 	= event.target.closest('[data-element="phone-item-add-to-cart-button"]');
+		
+			if (!phoneElement && !phoneElementAddToCartButton) {
+				return;
+			}
+		
+			const isPhoneElementClick 					= phoneElement !== null;
+			const isPhoneElementAddToCartButtonClick 	= phoneElementAddToCartButton !== null;
+		
+			switch(true){
+				case isPhoneElementAddToCartButtonClick:
+					this._onPhoneAddToBasketButtonClick(phoneElement.dataset.phoneId);
+					event.stopPropagation();
+					//this._render();
+					break;
+				case isPhoneElementClick:
+					this._onPhoneSelected(phoneElement.dataset.phoneId);
+					break;
+			}
+			
+		});
   }
 
   _render() {
@@ -30,7 +45,7 @@ export default class PhoneCatalog extends Component {
             </a>
   
             <div class="phones__btn-buy-wrapper">
-              <a class="btn btn-success">
+              <a class="btn btn-success" data-element="phone-item-add-to-cart-button">
                 Add
               </a>
             </div>
