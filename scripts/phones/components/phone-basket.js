@@ -34,8 +34,7 @@ export default class PhoneBasket {
 
     _delete(phoneItem) {
         this._phoneList.removeChild(phoneItem);
-        let id_ = phoneItem.dataset.id;
-        delete this._addedPhones[id_];
+        delete this._addedPhones[phoneItem.dataset.id];
     }
 
     _render() {

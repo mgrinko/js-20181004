@@ -92,7 +92,7 @@ export default class PhoneViewer extends Component {
             while (target !== this) {
                 if (target.tagName === 'IMG') {
                     e.preventDefault();
-                    largeImg.src = target.getAttribute('src');
+                    largeImg.src = target.src;
                     return;
                 }
                 target = target.parentNode;
