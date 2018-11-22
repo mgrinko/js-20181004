@@ -2,6 +2,7 @@
 
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
+import ShoppingCart from './components/shopping-cart.js';
 import PhoneService from './phone-service.js';
 
 export default class PhonesPage {
@@ -10,6 +11,12 @@ export default class PhonesPage {
 
     this._render();
 
+    this._initCatalog();
+    this._initViewer();
+    this._initShoppingCart();
+  }
+
+  _initCatalog() {
     this._catalog = new PhoneCatalog({
       element: this._element.querySelector('[data-component="phone-catalog"]'),
       phones: PhoneService.getAll(),
@@ -20,10 +27,28 @@ export default class PhonesPage {
         this._catalog.hide();
         this._viewer.show(phoneDetails);
       },
+      onAdd: (phoneId) => {
+        this._cart.add(phoneId)
+      },
     });
+  }
 
+  _initViewer() {
     this._viewer = new PhoneViewer({
       element: this._element.querySelector('[data-component="phone-viewer"]'),
+      onBack: () => {
+        this._viewer.hide();
+        this._catalog.show();
+      },
+      onAdd: (phoneId) => {
+        this._cart.add(phoneId)
+      },
+    });
+  }
+
+  _initShoppingCart() {
+    this._cart = new ShoppingCart({
+      element: document.querySelector('[data-component="shopping-cart"]'),
     });
   }
 
@@ -48,14 +73,7 @@ export default class PhonesPage {
             </p>
           </section>
     
-          <section>
-            <p>Shopping Cart</p>
-            <ul>
-              <li>Phone 1</li>
-              <li>Phone 2</li>
-              <li>Phone 3</li>
-            </ul>
-          </section>
+          <div data-component="shopping-cart"></div>
         </div>
     
         <!--Main content-->
