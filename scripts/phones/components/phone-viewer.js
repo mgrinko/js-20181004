@@ -1,8 +1,24 @@
 import Component from '../../component.js';
 
 export default class PhoneViewer extends Component {
-  show(phone) {
-    this._phone = phone;
+
+  constructor({ element, onBackBtn}) {
+    super({ element });
+
+      this._onBackBtn = onBackBtn;
+
+    this._element.addEventListener('click', (e) => {
+      let backBtn = event.target.closest('[data-element="back-btn"]');
+
+      this._onBackBtn(backBtn.dataset.phoneId);
+
+
+    })
+
+  }
+
+  show(phoneDetails) {
+    this._phone = phoneDetails;
 
     this._render();
 
@@ -10,36 +26,25 @@ export default class PhoneViewer extends Component {
   }
 
   _render() {
+    const { images, name, description} = this._phone;
+
     this._element.innerHTML = `
-      <img class="phone" src="img/phones/motorola-xoom-with-wi-fi.0.jpg">
+      <img class="phone" src="${ images[0] }">
   
-      <button>Back</button>
-      <button>Add to basket</button>
+      <button data-element="back-btn">Back</button>
+      <button data-element="add-btn">Add to basket</button>
   
   
-      <h1>Motorola XOOM™ with Wi-Fi</h1>
+      <h1>${ name }</h1>
   
-      <p>Motorola XOOM with Wi-Fi has a super-powerful dual-core processor and Android™ 3.0 (Honeycomb) — the Android platform designed specifically for tablets. With its 10.1-inch HD widescreen display, you’ll enjoy HD video in a thin, light, powerful and upgradeable tablet.</p>
+      <p>${ description }</p>
   
       <ul class="phone-thumbs">
+      ${ images.map(image => `
         <li>
-          <img src="img/phones/motorola-xoom-with-wi-fi.0.jpg">
+            <img src="${ image }">
         </li>
-        <li>
-          <img src="img/phones/motorola-xoom-with-wi-fi.1.jpg">
-        </li>
-        <li>
-          <img src="img/phones/motorola-xoom-with-wi-fi.2.jpg">
-        </li>
-        <li>
-          <img src="img/phones/motorola-xoom-with-wi-fi.3.jpg">
-        </li>
-        <li>
-          <img src="img/phones/motorola-xoom-with-wi-fi.4.jpg">
-        </li>
-        <li>
-          <img src="img/phones/motorola-xoom-with-wi-fi.5.jpg">
-        </li>
+      `).join('')}
       </ul>
     `;
   }
