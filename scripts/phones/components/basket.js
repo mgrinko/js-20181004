@@ -1,10 +1,11 @@
 import Component from "../../component.js";
+import PhoneService from './../phone-service.js';
 
 export default class Basket extends Component {
 	constructor({ element }){
 		super({ element });
 		
-		this._basketPhones = [];
+		this._basketPhoneIds = [];
 		
 		this._element.addEventListener('click', (event) => {
 			const basketPhoneElement = event.target.closest('[data-element="basket-phone-item"]');
@@ -20,28 +21,31 @@ export default class Basket extends Component {
 		this._render();
 	}
 	
-	addPhoneToBasket(phone){
-		const {_basketPhones: basketPhones} = this;
-		basketPhones.push(phone);
+	addPhoneToBasket(phoneId){
+		const {_basketPhoneIds: basketPhoneIds} = this;
+		basketPhoneIds.push(phoneId);
 		this._render();
 	}
 	
 	removePhoneFromCart(phoneId){
-		const {_basketPhones: basketPhones} = this;
-		const phoneIndex = basketPhones.findIndex(basketPhone => basketPhone.id === phoneId);
-		basketPhones.splice(phoneIndex, 1);
+		const {_basketPhoneIds: basketPhoneIds} = this;
+		const phoneIndex = basketPhoneIds.findIndex(basketPhone => basketPhone.id === phoneId);
+		basketPhoneIds.splice(phoneIndex, 1);
 		this._render();
 	}
 	
 	_render(){
-		const {_basketPhones: basketPhones} = this;
+		const {_basketPhoneIds: basketPhoneIds} = this;
 		
-		if (basketPhones.length > 0) {
+		if (basketPhoneIds.length > 0) {
 			this._element.innerHTML = `
 				<p>Shopping Cart</p>
 				<ul class="basket-phones">
-					${basketPhones
-						.map(phone => `<li data-element="basket-phone-item" data-phone-id="${ phone.id }">${phone.name}</li>`)
+					${basketPhoneIds
+						.map(phoneId => {
+							const phone = PhoneService.getOneById(phoneId);
+							return `<li data-element="basket-phone-item" data-phone-id="${ phone.id }">${phone.name}</li>`
+						})
 						.join('')
 					}
 				</ul>

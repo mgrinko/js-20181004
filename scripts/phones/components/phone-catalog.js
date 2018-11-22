@@ -11,27 +11,32 @@ export default class PhoneCatalog extends Component {
     this._render();
 	
 	this._element.addEventListener('click', (event) => {
-		const phoneElement 					= event.target.closest('[data-element="phone-item"]');
-		const phoneElementAddToCartButton 	= event.target.closest('[data-element="phone-item-add-to-cart-button"]');
-	
-		if (!phoneElement && !phoneElementAddToCartButton) {
+		const phoneElementAddToCartButton = event.target.closest('[data-element="phone-item-add-to-cart-button"]');
+		
+		if (!phoneElementAddToCartButton) {
 			return;
 		}
-	
-		const isPhoneElementClick 					= phoneElement !== null;
-		const isPhoneElementAddToCartButtonClick 	= phoneElementAddToCartButton !== null;
-	
-		switch(true){
-			case isPhoneElementAddToCartButtonClick:
-				this._onPhoneAddToBasketButtonClick(phoneElement.dataset.phoneId);
-				event.stopPropagation();
-				break;
-			case isPhoneElementClick:
-				this._onPhoneSelected(phoneElement.dataset.phoneId);
-				break;
-		}
+		
+		const phoneId = phoneElementAddToCartButton.dataset.phoneId;
+		
+		this._onPhoneAddToBasketButtonClick(phoneId);
 		
 	});
+	
+	this._element.addEventListener('click', (event) => {
+		const phoneElement = event.target.closest('[data-element="phone-item"]');
+		const phoneElementAddToCartButton = event.target.closest('[data-element="phone-item-add-to-cart-button"]');
+		
+		if (!phoneElement || phoneElementAddToCartButton) {
+			return;
+		}
+		
+		const phoneId = phoneElement.dataset.phoneId;
+		
+		this._onPhoneSelected(phoneId);
+	});
+	
+
   }
 
   _render() {
@@ -44,7 +49,7 @@ export default class PhoneCatalog extends Component {
             </a>
   
             <div class="phones__btn-buy-wrapper">
-              <a class="btn btn-success" data-element="phone-item-add-to-cart-button">
+              <a class="btn btn-success" data-element="phone-item-add-to-cart-button"  data-phone-id="${ phone.id }">
                 Add
               </a>
             </div>

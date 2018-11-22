@@ -26,8 +26,7 @@ export default class PhonesPage {
 				this._viewer.show(phoneDetails);
 			},
 			onPhoneAddToBasketButtonClick: (phoneId) => {
-				const phoneDetails = PhoneService.getOneById(phoneId);
-				this._basket.addPhoneToBasket(phoneDetails);
+				this._basket.addPhoneToBasket(phoneId);
 			}
 		});
 
@@ -37,8 +36,8 @@ export default class PhonesPage {
 				this._catalog.show();
 				this._viewer.hide();
 			},
-			onPhoneAddToBasketButtonClick: (phoneDetails) => {
-				this._basket.addPhoneToBasket(phoneDetails);
+			onPhoneAddToBasketButtonClick: (phoneId) => {
+				this._basket.addPhoneToBasket(phoneId);
 			},
 		});
 	

@@ -8,30 +8,33 @@ export default class PhoneViewer extends Component {
 		this._onPhoneAddToBasketButtonClick = onPhoneAddToBasketButtonClick;
 		
 		this._element.addEventListener('click', (event) => {
-			const phoneElementBackButton 			= event.target.closest('[data-element="phone-viewer-back-button"]');
-			const phoneElementImage 				= event.target.closest('[data-element="phone-viewer-image"]');
-			const phoneElementAddToBasketButton 	= event.target.closest('[data-element="phone-viewer-add-to-basket-button"]');
+			const phoneElementBackButton = event.target.closest('[data-element="phone-viewer-back-button"]');
 			
-			if (!phoneElementBackButton && !phoneElementImage && !phoneElementAddToBasketButton) {
+			if (!phoneElementBackButton) {
 				return;
 			}
-			const isPhoneElementBackButtonClick 		= phoneElementBackButton !== null;
-			const isPhoneElementImageClick 				= phoneElementImage !== null;
-			const isPhoneElementAddToBasketButtonClick 	= phoneElementAddToBasketButton !== null;
 			
-			switch(true){
-				case isPhoneElementBackButtonClick:
-					this._onPhoneBackButtonClick();
-					break;
-				case isPhoneElementImageClick:
-					const image = phoneElementImage.getAttribute('src');
-					this._onPhoneImageClick(image);
-					break;
-				case isPhoneElementAddToBasketButtonClick:
-					this._onPhoneAddToBasketButtonClick(this._phone);
-					this._render();
-					break;
+			this._onPhoneBackButtonClick();
+		});
+		
+		this._element.addEventListener('click', (event) => {
+			const phoneElementImage = event.target.closest('[data-element="phone-viewer-image"]');
+			if (!phoneElementImage){
+				return;
 			}
+			
+			const image = phoneElementImage.getAttribute('src');
+			this._onPhoneImageClick(image);
+		});
+		
+		this._element.addEventListener('click', (event) => {
+			const phoneElementAddToBasketButton = event.target.closest('[data-element="phone-viewer-add-to-basket-button"]');
+			if (!phoneElementAddToBasketButton){
+				return;
+			}
+			
+			this._onPhoneAddToBasketButtonClick(this._phone.id);
+			this._render();
 		});
 	}
 	
