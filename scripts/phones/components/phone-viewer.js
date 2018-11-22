@@ -2,7 +2,6 @@ import Component from '../../component.js';
 
 export default class PhoneViewer extends Component {
     constructor({ element, onClickGoBack, onClickImage }) {
-debugger;
         super({ element });
 
         super.show();
@@ -20,15 +19,12 @@ debugger;
 
         });
 
-
         this._element.addEventListener('click', (event) => {
-            if (event.target.tagName != 'IMG') {
+            if (event.target.closest('[data-element="image"]')) {
                 return;
             }
             this.onClickImage(event.target.src);
         })
-
-
     }
 
     show(phone){
