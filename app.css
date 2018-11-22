@@ -18,6 +18,15 @@ body {
   list-style: none;
 }
 
+.remove:after {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-image: url('./img/glyphicons-halflings.png');
+  background-position: 157px 0;
+}
+
 .thumb {
   float: left;
   margin: -0.5em 1em 1.5em 0;

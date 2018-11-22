@@ -1,12 +1,14 @@
 'use strict'
 
+import PhoneService from './phone-service.js';
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
-import PhoneService from './phone-service.js';
+import Cart from './components/cart.js';
 
 export default class PhonesPage {
   constructor({ element }) {
     this._element = element;
+    this._arrayPhoneName = [];
 
     this._render();
 
@@ -20,10 +22,26 @@ export default class PhonesPage {
         this._catalog.hide();
         this._viewer.show(phoneDetails);
       },
+
+      putPhoneToCart: (phoneName) => {
+        this._arrayPhoneName.push(phoneName);
+        console.log('AAAAARRRRAAAAAAY _catalog = ', this._arrayPhoneName);
+        this._cart.show(this._arrayPhoneName);
+      },
     });
 
     this._viewer = new PhoneViewer({
       element: this._element.querySelector('[data-component="phone-viewer"]'),
+      catalog: this._catalog,
+      putPhoneToCart: (phoneName) => {
+        this._arrayPhoneName.push(phoneName);
+        console.log('AAAAARRRRAAAAAAY _viewer = ', this._arrayPhoneName);
+        this._cart.show(this._arrayPhoneName);
+      },
+    });
+
+    this._cart = new Cart({
+      element: this._element.querySelector('[data-component="cart"]'),
     });
   }
 
@@ -50,11 +68,7 @@ export default class PhonesPage {
     
           <section>
             <p>Shopping Cart</p>
-            <ul>
-              <li>Phone 1</li>
-              <li>Phone 2</li>
-              <li>Phone 3</li>
-            </ul>
+            <div data-component="cart"></div>
           </section>
         </div>
     
