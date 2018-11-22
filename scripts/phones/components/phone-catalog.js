@@ -15,7 +15,6 @@ export default class PhoneCatalog extends Component {
       if (!phoneElement) {
         return;
       }
-
       this._onPhoneSelected(phoneElement.dataset.phoneId);
     });
   }
@@ -41,5 +40,7 @@ export default class PhoneCatalog extends Component {
         `).join('') }
       </ul>
     `;
+
+
   }
 }

@@ -2,6 +2,7 @@
 
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
+import PhoneBasket from './components/phone-basket.js';
 import PhoneService from './phone-service.js';
 
 export default class PhonesPage {
@@ -24,7 +25,18 @@ export default class PhonesPage {
 
     this._viewer = new PhoneViewer({
       element: this._element.querySelector('[data-component="phone-viewer"]'),
+        onBackButtonClick: () => {
+            this._viewer.hide();
+            this._catalog.show();
+        },
+        onAddToBasket: (phoneId, phoneName) => {
+            this._basket._add(phoneId, phoneName)
+        }
     });
+
+    this._basket = new PhoneBasket({
+        element: this._element.querySelector('[data-component="phone-basket"]'),
+    })
   }
 
   _render() {
@@ -48,14 +60,7 @@ export default class PhonesPage {
             </p>
           </section>
     
-          <section>
-            <p>Shopping Cart</p>
-            <ul>
-              <li>Phone 1</li>
-              <li>Phone 2</li>
-              <li>Phone 3</li>
-            </ul>
-          </section>
+          <div data-component="phone-basket"></div>
         </div>
     
         <!--Main content-->
