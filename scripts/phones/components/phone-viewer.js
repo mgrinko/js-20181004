@@ -59,7 +59,7 @@ export default class PhoneViewer extends Component {
                     <span>Hardware</span>
                     <dl>
                         <dt>accelerometer</dt>
-                        <dd>${ detailOptions.hardware.accelerometer }</dd>
+                        <dd>${ detailOptions.hardware.accelerometer  ? '+' : '-' }</dd>
                     <dl>
                     <dl>
                         <dt>audioJack</dt>
@@ -71,7 +71,7 @@ export default class PhoneViewer extends Component {
                     <dl>
                      <dl>
                         <dt>fmRadio</dt>
-                        <dd>${ detailOptions.hardware.fmRadio }</dd>
+                        <dd>${ detailOptions.hardware.fmRadio ? '+' : '-'}</dd>
                     <dl>
                     <dl>
                         <dt>physicalKeyboard</dt>
