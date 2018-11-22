@@ -24,4 +24,16 @@ export default class Component {
       callback(event);
     });
   }
+
+  emit(eventName, data) {
+    const customEvent = new CustomEvent(eventName, { detail: data });
+
+    this._element.dispatchEvent(customEvent);
+  }
+
+  subscribe(eventName, callback) {
+    this._element.addEventListener(eventName, (event) => {
+      callback(event.detail);
+    });
+  }
 }
