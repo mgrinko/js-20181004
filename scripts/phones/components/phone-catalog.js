@@ -5,6 +5,8 @@ export default class PhoneCatalog extends Component {
     super({ element });
 
     this._phones = phones;
+    
+    this._initialPhones  = phones;
 
     this._render();
 
@@ -19,6 +21,13 @@ export default class PhoneCatalog extends Component {
 
       this.emit('phone-selected', phoneElement.dataset.phoneId);
     });
+  }
+  
+  search(searchQuery){
+    this._phones = this._initialPhones.filter(phone => {
+      return phone.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1
+    });
+    this._render();
   }
 
   _render() {
