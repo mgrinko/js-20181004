@@ -220,7 +220,27 @@ const phoneDetailsFromServer = {
 };
 
 class MyPromise {
+  constructor() {
+    this._status = 'pending';
+    this._successCallbacks = [];
+  }
 
+  then(callback) {
+    if (this._status === 'fulfilled') {
+      callback(this._result);
+    } else {
+      this._successCallbacks.push(callback);
+    }
+  }
+
+  _resolve(data) {
+    this._status = 'fulfilled';
+    this._result = data;
+
+    this._successCallbacks.forEach(callback => {
+      callback(data);
+    });
+  }
 }
 
 const PhoneService = {
@@ -235,19 +255,7 @@ const PhoneService = {
   },
 
   getAllPromise({ query, orderBy } = {}) {
-    let promise = {
-      _successCallbacks: [],
-
-      then(callback) {
-        this._successCallbacks.push(callback);
-      },
-
-      _resolve(data) {
-        this._successCallbacks.forEach(callback => {
-          callback(data);
-        });
-      }
-    };
+    let promise = new MyPromise();
 
     setTimeout(() => {
       const phones = phonesFromServer
@@ -255,7 +263,7 @@ const PhoneService = {
       const sortedPhones = this._sort(filteredPhones, orderBy);
 
       promise._resolve(sortedPhones);
-    });
+    }, 1000);
 
     return promise;
   },
