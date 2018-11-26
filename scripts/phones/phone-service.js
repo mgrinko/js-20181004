@@ -221,13 +221,35 @@ const phoneDetailsFromServer = {
 
 
 const PhoneService = {
-  getAll() {
-    return phonesFromServer;
+  getAll({ query, orderBy } = {}) {
+    let filteredPhones = this._filter(phonesFromServer, query);
+    let sortedPhones = this._sort(filteredPhones, orderBy);
+
+    return sortedPhones;
   },
 
 
   getOneById(phoneId) {
     return phoneDetailsFromServer;
+  },
+
+  _filter(phones, query) {
+    if (!query) {
+      return phones;
+    }
+
+    const normalizedQuery = query.toLowerCase();
+
+    return phones
+      .filter(phone => {
+        const normalizedName = phone.name.toLowerCase();
+
+        return normalizedName.includes(normalizedQuery);
+      })
+  },
+
+  _sort(phones, orderBy) {
+    return phones;
   }
 }
 
