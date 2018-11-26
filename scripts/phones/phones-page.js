@@ -2,6 +2,7 @@
 
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
+import ShoppingCart from './components/shopping-cart.js';
 import PhoneService from './phone-service.js';
 
 export default class PhonesPage {
@@ -10,29 +11,54 @@ export default class PhonesPage {
 
     this._render();
 
-    this._catalog = new PhoneCatalog({
-      element: this._element.querySelector('[data-component="phone-catalog"]'),
-      phones: PhoneService.getAll(),
-
-      onPhoneSelected: (phoneId) => {
-        const phoneDetails = PhoneService.getOneById(phoneId);
-
-        this._catalog.hide();
-        this._viewer.show(phoneDetails);
-      },
-    });
-
-    this._viewer = new PhoneViewer({
-      element: this._element.querySelector('[data-component="phone-viewer"]'),
-
-        onBackBtn: () => {
-            this._viewer.hide();
-            this._catalog.show();
-        }
-    });
-
-
+    this._initCatalog();
+    this._initViewer();
+    this._initShoppingCart();
   }
+
+    _initCatalog() {
+        this._catalog = new PhoneCatalog({
+            element: this._element.querySelector('[data-component="phone-catalog"]'),
+            phones: PhoneService.getAll(),
+
+            onPhoneSelected: (phoneId) => {
+                const phoneDetails = PhoneService.getOneById(phoneId);
+
+                this._catalog.hide();
+                this._viewer.show(phoneDetails);
+            },
+
+            onAdd: (phoneId) => {
+                this._cart.add(phoneId);
+            }
+        });
+    }
+
+    _initViewer() {
+        this._viewer = new PhoneViewer({
+            element: this._element.querySelector('[data-component="phone-viewer"]'),
+
+            onBackBtn: () => {
+                this._viewer.hide();
+                this._catalog.show();
+            },
+
+            onAdd: (phoneId) => {
+                this._cart.add(phoneId);
+            },
+
+            // onGallery: () => {
+            //
+            // }
+        });
+    }
+
+    _initShoppingCart() {
+        this._cart = new ShoppingCart({
+            element: document.querySelector('[data-component="shopping-cart"]'),
+        });
+    }
+
 
   _render() {
     this._element.innerHTML = `
@@ -55,14 +81,7 @@ export default class PhonesPage {
             </p>
           </section>
     
-          <section>
-            <p>Shopping Cart</p>
-            <ul>
-              <li>Phone 1</li>
-              <li>Phone 2</li>
-              <li>Phone 3</li>
-            </ul>
-          </section>
+          <div data-component="shopping-cart"></div>
         </div>
     
         <!--Main content-->
