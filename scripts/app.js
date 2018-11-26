@@ -34,5 +34,8 @@ let currentPage = new PhonesPage({
 //     render(topic);
 //   });
 //
-// Promise.all([academyPromise, coursePromise])
-//   .then()
+// let academy = await academyPromise;
+// let course = await coursePromise;
+// let course = await coursePromise;
+// let course = await coursePromise;
+// let course = await coursePromise;
