@@ -64,20 +64,20 @@ export default class PhonesPage {
     });
 
     this._filter.subscribe('filter', (query) => {
-      this._query = query;
+      this._currentQuery = query;
       this._showFilteredPhones();
     });
 
     this._filter.subscribe('change-order', (orderBy) => {
-      this._orderBy = orderBy
+      this._currentOrder = orderBy
       this._showFilteredPhones();
     });
   }
 
   _showFilteredPhones() {
     const phones = PhoneService.getAll({
-      query: this._query,
-      orderBy: this._orderBy,
+      query: this._currentQuery,
+      orderBy: this._currentOrder,
     });
 
     this._catalog.show(phones);
