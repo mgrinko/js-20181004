@@ -1,35 +1,25 @@
 
 const PhoneService = {
   getAll({ query, orderBy } = {}) {
-    return new Promise(
-      (resolve, reject) => {
-        let xhr = new XMLHttpRequest();
+    return this.sendRequest(`http://localhost:3000/api/phones.json`)
+      .then((phones) => {
+        const filteredPhones = this._filter(phones, query);
+        const sortedPhones = this._sort(filteredPhones, orderBy);
 
-        xhr.open('GET', `http://localhost:3000/api/phones.json`, true)
-        xhr.send();
-
-        xhr.onload = () => {
-          if (xhr.status !== 200) {
-            reject(new Error(xhr.status + ': ' + xhr.statusText))
-          } else {
-
-            const phones = JSON.parse(xhr.responseText)
-            const filteredPhones = this._filter(phones, query);
-            const sortedPhones = this._sort(filteredPhones, orderBy);
-
-            resolve(sortedPhones);
-          }
-        };
-      }
-    );
+        return sortedPhones;
+      });
   },
 
   getOneById(phoneId) {
+    return this.sendRequest(`http://localhost:3000/api/phones/${ phoneId }.json`);
+  },
+
+  sendRequest(url, { method = 'GET'} = {}) {
     return new Promise(
       (resolve, reject) => {
         let xhr = new XMLHttpRequest();
 
-        xhr.open('GET', `http://localhost:3000/api/phones/${ phoneId }.json`, true)
+        xhr.open(method, url, true)
         xhr.send();
 
         xhr.onload = () => {
