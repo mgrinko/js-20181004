@@ -1,8 +1,10 @@
 
 const PhoneService = {
   getAll({ query, orderBy } = {}) {
-    return this.sendRequest(`http://localhost:3000/api/phones.json`)
+    return fetch(`http://localhost:3000/api/phones.json`)
+      .then((response) => response.json())
       .then((phones) => {
+        console.log(phones);
         const filteredPhones = this._filter(phones, query);
         const sortedPhones = this._sort(filteredPhones, orderBy);
 
@@ -11,7 +13,8 @@ const PhoneService = {
   },
 
   getOneById(phoneId) {
-    return this.sendRequest(`http://localhost:3000/api/phones/${ phoneId }.json`);
+    return fetch(`http://localhost:3000/api/phones/${ phoneId }.json`)
+      .then((response) => response.json())
   },
 
   sendRequest(url, { method = 'GET'} = {}) {

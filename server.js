@@ -2,11 +2,11 @@ let http = require('http');
 var static = require('node-static');
 var file = new static.Server('.', {
   cache: 0,
-  // headers: {
-  //   'Access-Control-Allow-Origin': 'http://localhost:8080',
-  //   'Access-Control-Allow-Methods': 'POST',
-  //   'Access-Control-Allow-Headers': 'Content-Type'
-  // }
+  headers: {
+    'Access-Control-Allow-Origin': 'http://localhost:63342',
+    'Access-Control-Allow-Methods': 'POST, GET',
+    'Access-Control-Allow-Headers': 'Content-Type'
+  }
 });
 
 function accept(req, res) {
