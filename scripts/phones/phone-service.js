@@ -170,16 +170,22 @@ const PhoneService = {
   },
 
   getOneById(phoneId) {
-    let xhr = new XMLHttpRequest();
+    return new Promise(
+      (resolve, reject) => {
+        let xhr = new XMLHttpRequest();
 
-    xhr.open('GET', `http://localhost:3000/api/phones/${ phoneId }.json`, false)
-    xhr.send();
+        xhr.open('GET', `http://localhost:3000/api/phones/${ phoneId }.json`, true)
+        xhr.send();
 
-    if (xhr.status !== 200) {
-      console.error( xhr.status + ': ' + xhr.statusText );
-    } else {
-      return JSON.parse(xhr.responseText);
-    }
+        xhr.onload = () => {
+          if (xhr.status !== 200) {
+            reject(new Error(xhr.status + ': ' + xhr.statusText))
+          } else {
+            resolve(JSON.parse(xhr.responseText));
+          }
+        };
+      }
+    );
   },
 
   _filter(phones, query) {
