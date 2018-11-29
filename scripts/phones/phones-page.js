@@ -32,10 +32,6 @@ export default class PhonesPage {
         this._catalog.hide();
         this._viewer.show(phoneDetails);
       });
-
-      promise.catch(error => {
-        console.log(error)
-      });
     });
 
     this._catalog.subscribe('add', (phoneId) => {
@@ -80,14 +76,13 @@ export default class PhonesPage {
     });
   }
 
-  _showFilteredPhones() {
-    PhoneService.getAll({
+  async _showFilteredPhones() {
+    const phones = await PhoneService.getAll({
       query: this._currentQuery,
       orderBy: this._currentOrder,
-    })
-      .then((phones) => {
-        this._catalog.show(phones);
-      });
+    });
+
+    this._catalog.show(phones);
   }
 
   _render() {
