@@ -1,4 +1,5 @@
 const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   mode: 'none',
@@ -34,6 +35,17 @@ module.exports = {
       }
     ]
   },
+
+  optimization: {
+    minimize: true,
+    minimizer: [new UglifyJsPlugin({
+      sourceMap: true,
+    })],
+  },
+
+  // plugins: [
+  //   new UglifyJsPlugin()
+  // ],
 
   devServer: {
     contentBase: path.join(__dirname, 'public'),
