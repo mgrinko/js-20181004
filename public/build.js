@@ -1417,6 +1417,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(13);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _component_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(15);
+/* harmony import */ var _phone_catalog_html__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(30);
+
 
 
 
@@ -1471,9 +1473,9 @@ function (_Component) {
   }, {
     key: "_render",
     value: function _render() {
-      this._element.innerHTML = "\n      <ul class=\"phones\">\n        ".concat(this._phones.map(function (phone) {
-        return "\n          <li\n            data-element=\"phone-item\"\n            class=\"thumbnail\"\n            data-phone-id=\"".concat(phone.id, "\"\n          >\n            <a href=\"#").concat(phone.id, "\" class=\"thumb\" data-element=\"phone-link\">\n              <img alt=\"").concat(phone.name, "\" src=\"").concat(phone.imageUrl, "\">\n            </a>\n  \n            <div class=\"phones__btn-buy-wrapper\">\n              <a class=\"btn btn-success\" data-element=\"add-button\" >\n                Add\n              </a>\n            </div>\n  \n            <a href=\"#").concat(phone.id, "\" data-element=\"phone-link\">\n              ").concat(phone.name, "\n            </a>\n            <p>").concat(phone.snippet, "</p>\n          </li>\n        ");
-      }).join(''), "\n      </ul>\n    ");
+      this._element.innerHTML = Object(_phone_catalog_html__WEBPACK_IMPORTED_MODULE_7__["default"])({
+        phones: this._phones
+      });
     }
   }]);
 
@@ -1913,6 +1915,42 @@ function _nonIterableSpread() {
 }
 
 module.exports = _nonIterableSpread;
+
+/***/ }),
+/* 30 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (({ phones }) => `
+
+<ul class="phones">
+  ${ phones.map(phone => `
+    <li
+      data-element="phone-item"
+      class="thumbnail"
+      data-phone-id="${ phone.id }"
+    >
+      <a href="#${ phone.id }" class="thumb" data-element="phone-link">
+        <img alt="${ phone.name }" src="${ phone.imageUrl }">
+      </a>
+
+      <div class="phones__btn-buy-wrapper">
+        <a class="btn btn-success" data-element="add-button" >
+          Add
+        </a>
+      </div>
+
+      <a href="#${ phone.id }" data-element="phone-link">
+        ${ phone.name }
+      </a>
+      <p>${ phone.snippet }</p>
+    </li>
+  `).join('') }
+</ul>
+
+`);
+
 
 /***/ })
 /******/ ]);
