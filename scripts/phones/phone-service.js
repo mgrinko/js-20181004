@@ -1,10 +1,10 @@
 // const API_URL = `http://localhost:3000/api`;
-const API_URL = `https://mgrinko.github.io/js-20181004/api`;
+const API_URL = 'https://mgrinko.github.io/js-20181004/api';
 
 
 const PhoneService = {
   getAll({ query, orderBy } = {}) {
-    return this.fetchData(`/phones`)
+    return this.fetchData('/phones')
       .then((phones) => {
         const filteredPhones = this._filter(phones, query);
         const sortedPhones = this._sort(filteredPhones, orderBy);
@@ -19,7 +19,7 @@ const PhoneService = {
 
   fetchData(url, params = {}) {
     return fetch(`${ API_URL }${ url }.json`, params)
-      .then((response) => response.json())
+      .then((response) => response.json());
   },
 
   sendRequest(url, { method = 'GET'} = {}) {
@@ -27,12 +27,12 @@ const PhoneService = {
       (resolve, reject) => {
         let xhr = new XMLHttpRequest();
 
-        xhr.open(method, url, true)
+        xhr.open(method, url, true);
         xhr.send();
 
         xhr.onload = () => {
           if (xhr.status !== 200) {
-            reject(new Error(xhr.status + ': ' + xhr.statusText))
+            reject(new Error(xhr.status + ': ' + xhr.statusText));
           } else {
             resolve(JSON.parse(xhr.responseText));
           }
@@ -53,7 +53,7 @@ const PhoneService = {
         const normalizedName = phone.name.toLowerCase();
 
         return normalizedName.includes(normalizedQuery);
-      })
+      });
   },
 
   _sort(phones, orderBy) {
@@ -68,6 +68,6 @@ const PhoneService = {
           : -1;
       });
   }
-}
+};
 
 export default PhoneService;

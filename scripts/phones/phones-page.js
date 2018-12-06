@@ -1,6 +1,6 @@
-'use strict'
+'use strict';
 
-import Filter from './components/filter.js'
+import Filter from './components/filter.js';
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
 import ShoppingCart from './components/shopping-cart.js';
@@ -50,7 +50,7 @@ export default class PhonesPage {
     });
 
     this._viewer.subscribe('add', (phoneId) => {
-      this._cart.add(phoneId)
+      this._cart.add(phoneId);
     });
   }
 
@@ -71,7 +71,7 @@ export default class PhonesPage {
     });
 
     this._filter.subscribe('change-order', (orderBy) => {
-      this._currentOrder = orderBy
+      this._currentOrder = orderBy;
       this._showFilteredPhones();
     });
   }
