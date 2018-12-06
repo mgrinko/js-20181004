@@ -1,4 +1,5 @@
 import Component from '../../component.js';
+import debounce from 'lodash/debounce';
 
 export default class Filter extends Component {
   constructor({ element }) {
@@ -6,9 +7,13 @@ export default class Filter extends Component {
 
     this._render();
 
-    this.on('input', 'query', (event) => {
-      this.emit('filter', event.delegateTarget.value);
-    });
+    this.on(
+      'input',
+      'query',
+      debounce((event) => {
+        this.emit('filter', event.delegateTarget.value);
+      }, 2000)
+    );
 
     this.on('change', 'order-by', (event) => {
       this.emit('change-order', event.delegateTarget.value);
