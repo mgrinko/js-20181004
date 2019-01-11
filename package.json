@@ -1,0 +1,42 @@
+{
+  "name": "js-20181004",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "./node_modules/.bin/webpack-dev-server",
+    "build": "./node_modules/.bin/webpack",
+    "lint": "./node_modules/.bin/eslint ./scripts/*.js --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mgrinko/js-20181004.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mgrinko/js-20181004/issues"
+  },
+  "homepage": "https://github.com/mgrinko/js-20181004#readme",
+  "dependencies": {
+    "@babel/core": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/runtime": "^7.2.0",
+    "babel-loader": "^8.0.4",
+    "css-loader": "^1.0.1",
+    "handlebars": "^4.0.12",
+    "handlebars-loader": "^1.7.0",
+    "lodash": "^4.17.11",
+    "style-loader": "^0.23.1",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "webpack": "^4.26.1",
+    "webpack-cli": "^3.1.2"
+  },
+  "devDependencies": {
+    "eslint": "^5.9.0",
+    "node-static": "^0.7.11",
+    "webpack-dev-server": "^3.1.10"
+  }
+}

@@ -1,5 +1,6 @@
-'use strict'
+'use strict';
 
+import Filter from './components/filter.js';
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
 import ShoppingCart from './components/shopping-cart.js';
@@ -14,19 +15,23 @@ export default class PhonesPage {
     this._initCatalog();
     this._initViewer();
     this._initShoppingCart();
+    this._initFilter();
   }
 
   _initCatalog() {
     this._catalog = new PhoneCatalog({
       element: this._element.querySelector('[data-component="phone-catalog"]'),
-      phones: PhoneService.getAll(),
     });
 
-    this._catalog.subscribe('phone-selected', (phoneId) => {
-      const phoneDetails = PhoneService.getOneById(phoneId);
+    this._showFilteredPhones();
 
-      this._catalog.hide();
-      this._viewer.show(phoneDetails);
+    this._catalog.subscribe('phone-selected', (phoneId) => {
+      const promise = PhoneService.getOneById(phoneId);
+
+      promise.then((phoneDetails) => {
+        this._catalog.hide();
+        this._viewer.show(phoneDetails);
+      });
     });
 
     this._catalog.subscribe('add', (phoneId) => {
@@ -41,11 +46,11 @@ export default class PhonesPage {
 
     this._viewer.subscribe('back', () => {
       this._viewer.hide();
-      this._catalog.show();
+      this._showFilteredPhones();
     });
 
     this._viewer.subscribe('add', (phoneId) => {
-      this._cart.add(phoneId)
+      this._cart.add(phoneId);
     });
   }
 
@@ -55,27 +60,38 @@ export default class PhonesPage {
     });
   }
 
+  _initFilter() {
+    this._filter = new Filter({
+      element: document.querySelector('[data-component="filter"]'),
+    });
+
+    this._filter.subscribe('filter', (query) => {
+      this._currentQuery = query;
+      this._showFilteredPhones();
+    });
+
+    this._filter.subscribe('change-order', (orderBy) => {
+      this._currentOrder = orderBy;
+      this._showFilteredPhones();
+    });
+  }
+
+  async _showFilteredPhones() {
+    const phones = await PhoneService.getAll({
+      query: this._currentQuery,
+      orderBy: this._currentOrder,
+    });
+
+    this._catalog.show(phones);
+  }
+
   _render() {
     this._element.innerHTML = `
       <div class="row">
   
         <!--Sidebar-->
         <div class="col-md-2">
-          <section>
-            <p>
-              Search:
-              <input>
-            </p>
-    
-            <p>
-              Sort by:
-              <select>
-                <option value="name">Alphabetical</option>
-                <option value="age">Newest</option>
-              </select>
-            </p>
-          </section>
-    
+          <div data-component="filter"></div>
           <div data-component="shopping-cart"></div>
         </div>
     
