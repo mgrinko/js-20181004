@@ -1,45 +1,38 @@
 import Component from '../../component.js';
 
+import templateFunction from './phone-catalog.hbs';
+import './phone-catalog.css';
+
 export default class PhoneCatalog extends Component {
-  constructor({ element, phones, onPhoneSelected }) {
+  constructor({ element }) {
     super({ element });
 
-    this._phones = phones;
-    this._onPhoneSelected = onPhoneSelected;
+    this._phones = [];
 
     this._render();
 
-    this._element.addEventListener('click', (event) => {
-      let phoneElement = event.target.closest('[data-element="phone-item"]');
+    this.on('click', 'add-button', (event) => {
+      const phoneElement = event.target.closest('[data-element="phone-item"]');
 
-      if (!phoneElement) {
-        return;
-      }
+      this.emit('add', phoneElement.dataset.phoneId);
+    });
 
-      this._onPhoneSelected(phoneElement.dataset.phoneId);
+    this.on('click', 'phone-link', (event) => {
+      const phoneElement = event.target.closest('[data-element="phone-item"]');
+
+      this.emit('phone-selected', phoneElement.dataset.phoneId);
     });
   }
 
+  show(phones) {
+    this._phones = phones;
+    this._render();
+    super.show();
+  }
+
   _render() {
-    this._element.innerHTML = `
-      <ul class="phones">
-        ${ this._phones.map(phone => `
-          <li class="thumbnail" data-element="phone-item" data-phone-id="${ phone.id }">
-            <a href="#${ phone.id }" class="thumb">
-              <img alt="${ phone.name }" src="${ phone.imageUrl }">
-            </a>
-  
-            <div class="phones__btn-buy-wrapper">
-              <a class="btn btn-success">
-                Add
-              </a>
-            </div>
-  
-            <a href="#${ phone.id }">${ phone.name }</a>
-            <p>${ phone.snippet }</p>
-          </li>
-        `).join('') }
-      </ul>
-    `;
+    this._element.innerHTML = templateFunction({
+      phones: this._phones,
+    });
   }
 }
