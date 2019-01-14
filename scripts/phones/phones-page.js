@@ -1,6 +1,6 @@
-'use strict'
+'use strict';
 
-import Filter from './components/filter.js'
+import Filter from './components/filter.js';
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
 import ShoppingCart from './components/shopping-cart.js';
@@ -26,10 +26,12 @@ export default class PhonesPage {
     this._showFilteredPhones();
 
     this._catalog.subscribe('phone-selected', (phoneId) => {
-      const phoneDetails = PhoneService.getOneById(phoneId);
+      const promise = PhoneService.getOneById(phoneId);
 
-      this._catalog.hide();
-      this._viewer.show(phoneDetails);
+      promise.then((phoneDetails) => {
+        this._catalog.hide();
+        this._viewer.show(phoneDetails);
+      });
     });
 
     this._catalog.subscribe('add', (phoneId) => {
@@ -48,7 +50,7 @@ export default class PhonesPage {
     });
 
     this._viewer.subscribe('add', (phoneId) => {
-      this._cart.add(phoneId)
+      this._cart.add(phoneId);
     });
   }
 
@@ -69,27 +71,18 @@ export default class PhonesPage {
     });
 
     this._filter.subscribe('change-order', (orderBy) => {
-      this._currentOrder = orderBy
+      this._currentOrder = orderBy;
       this._showFilteredPhones();
     });
   }
 
-  _showFilteredPhones() {
-    const phonesPromise = PhoneService.getAllPromise(
-      { query: this._currentQuery, orderBy: this._currentOrder, }
-    );
+  async _showFilteredPhones() {
+    const phones = await PhoneService.getAll({
+      query: this._currentQuery,
+      orderBy: this._currentOrder,
+    });
 
-    phonesPromise
-      .then((phones) => {
-        this._catalog.show(phones);
-      });
-
-    setTimeout(() => {
-      phonesPromise
-        .then((phones) => {
-          console.log(phones)
-        });
-    }, 3000);
+    this._catalog.show(phones);
   }
 
   _render() {
